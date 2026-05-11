@@ -6,19 +6,18 @@
 <title>JohnKittithat — Film Director</title>
 <meta name="description" content="JohnKittithat — Film Director. Selected works, showreel, and contact." />
 <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
-<link rel="icon" type="image/svg+xml" href='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2222%22 fill=%22%230b0b0b%22/><text x=%2250%22 y=%2250%22 font-family=%22-apple-system,Helvetica,Arial,sans-serif%22 font-weight=%22600%22 font-size=%2246%22 fill=%22%23ededea%22 text-anchor=%22middle%22 dominant-baseline=%22central%22 letter-spacing=%22-2%22>JK</text></svg>' />
+<link rel="icon" type="image/svg+xml" href='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2222%22 fill=%22%23f5f4ef%22/><text x=%2250%22 y=%2250%22 font-family=%22-apple-system,Helvetica,Arial,sans-serif%22 font-weight=%22600%22 font-size=%2246%22 fill=%22%231a1916%22 text-anchor=%22middle%22 dominant-baseline=%22central%22 letter-spacing=%22-2%22>JK</text></svg>' />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<!-- Geist & Geist Mono — minimal, modern, smart -->
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@300;400;500&family=IBM+Plex+Sans+Thai:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #0b0b0b;
-    --bg-2: #111111;
-    --fg: #ededea;
-    --fg-dim: #8a8a85;
-    --line: #1f1f1d;
-    --accent: #d9d4c7;
+    --bg: #f5f4ef;         /* warm off-white, MUJI feel */
+    --bg-2: #ebeae4;       /* secondary surface */
+    --fg: #1a1916;         /* warm near-black */
+    --fg-dim: #8a8782;     /* warm grey */
+    --line: #d8d6cf;       /* warm line */
+    --accent: #3a3835;
     --display: 'Geist', 'IBM Plex Sans Thai', system-ui, -apple-system, sans-serif;
     --sans: 'Geist', 'IBM Plex Sans Thai', system-ui, -apple-system, sans-serif;
     --mono: 'Geist Mono', ui-monospace, 'JetBrains Mono', monospace;
@@ -51,7 +50,7 @@
     padding: 22px 32px;
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    background: rgba(11,11,11,0.6);
+    background: rgba(245,244,239,0.7);
     border-bottom: 1px solid var(--line);
     font-family: var(--mono);
     font-size: 11px;
@@ -144,13 +143,13 @@
     cursor: pointer;
     transition: border-color .3s ease;
   }
-  .reel-frame:hover { border-color: var(--fg-dim); }
+  .reel-frame:hover { border-color: var(--fg); }
   .reel-frame img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     display: block;
-    opacity: 0.85;
+    opacity: 0.95;
     transition: opacity .4s ease, transform .8s cubic-bezier(.2,.7,.2,1);
   }
   .reel-frame:hover img { opacity: 1; transform: scale(1.02); }
@@ -160,8 +159,8 @@
     align-items: center;
     justify-content: center;
     background:
-      radial-gradient(ellipse at center, rgba(217,212,199,0.06), transparent 70%),
-      linear-gradient(180deg, #141413, #0d0d0c);
+      radial-gradient(ellipse at center, rgba(58,56,53,0.06), transparent 70%),
+      linear-gradient(180deg, #ebeae4, #e0ded7);
     pointer-events: none;
   }
   .reel-play {
@@ -173,7 +172,7 @@
     justify-content: center;
     transition: all .3s ease;
     color: var(--fg);
-    background: rgba(11,11,11,0.3);
+    background: rgba(245,244,239,0.6);
     backdrop-filter: blur(6px);
   }
   .reel-frame:hover .reel-play {
@@ -247,21 +246,21 @@
     object-fit: cover;
     display: block;
     transition: transform .8s cubic-bezier(.2,.7,.2,1), opacity .3s ease;
-    opacity: 0.9;
+    opacity: 0.95;
   }
   .work:hover .work-thumb img { transform: scale(1.04); opacity: 1; }
   .work-thumb::after {
     content: '';
     position: absolute; inset: 0;
-    background: linear-gradient(180deg, transparent 55%, rgba(0,0,0,0.4));
+    background: linear-gradient(180deg, transparent 60%, rgba(0,0,0,0.18));
     pointer-events: none;
   }
   .work-thumb .ph {
     position: absolute; inset: 0;
     display: flex; align-items: center; justify-content: center;
-    font-family: var(--display); font-weight: 700;
+    font-family: var(--display); font-weight: 500;
     font-size: clamp(36px, 4.5vw, 64px);
-    color: rgba(255,255,255,0.06);
+    color: rgba(26,25,22,0.12);
     letter-spacing: 0.02em;
   }
   .work-info {
@@ -287,16 +286,16 @@
     white-space: nowrap;
   }
 
-  /* fallback gradients per work (while thumbs load) */
-  .w-1 .work-thumb { background: linear-gradient(135deg, #2b1a18, #3a1f1c 50%, #4a2424); }
-  .w-2 .work-thumb { background: linear-gradient(160deg, #14201a, #1b3329 60%, #244038); }
-  .w-3 .work-thumb { background: linear-gradient(200deg, #1f1414, #2a1818 60%, #3a2020); }
-  .w-4 .work-thumb { background: linear-gradient(140deg, #14180e, #1e2614 50%, #2a3220); }
-  .w-5 .work-thumb { background: linear-gradient(180deg, #1c1612, #2a2018 50%, #3a2c20); }
-  .w-6 .work-thumb { background: linear-gradient(120deg, #121212, #1d1d1d 50%, #2a2a2a); }
-  .w-7 .work-thumb { background: linear-gradient(150deg, #181016, #221423 50%, #321a2e); }
-  .w-8 .work-thumb { background: linear-gradient(110deg, #1a1410, #2a1f14 50%, #3a2a1c); }
-  .w-9 .work-thumb { background: linear-gradient(220deg, #101a16, #142a22 50%, #1c3a30); }
+  /* light warm fallback gradients */
+  .w-1 .work-thumb { background: linear-gradient(135deg, #f0e8e2, #e8ddd2 50%, #ddcfc1); }
+  .w-2 .work-thumb { background: linear-gradient(160deg, #e8eae3, #dde0d4 60%, #ced3c2); }
+  .w-3 .work-thumb { background: linear-gradient(200deg, #efe5e0, #e6d6cf 60%, #d8c3ba); }
+  .w-4 .work-thumb { background: linear-gradient(140deg, #ebe9de, #ddd9c7 50%, #cdc8b1); }
+  .w-5 .work-thumb { background: linear-gradient(180deg, #ebe7e1, #ddd5cc 50%, #ccc0b3); }
+  .w-6 .work-thumb { background: linear-gradient(120deg, #ebeae4, #dad8d0 50%, #c8c6bd); }
+  .w-7 .work-thumb { background: linear-gradient(150deg, #efe8e8, #e3d4d4 50%, #d3bdbd); }
+  .w-8 .work-thumb { background: linear-gradient(110deg, #efe8de, #e4d4c0 50%, #d3bd9f); }
+  .w-9 .work-thumb { background: linear-gradient(220deg, #e3ebe6, #ccdcd2 50%, #b3c7bb); }
 
   /* ---------- About ---------- */
   .about {
@@ -416,10 +415,10 @@
     text-transform: uppercase;
   }
 
-  /* ---------- Modal ---------- */
+  /* ---------- Modal (keep dark for cinema feel) ---------- */
   .modal {
     position: fixed; inset: 0;
-    background: rgba(0,0,0,0.94);
+    background: rgba(10,10,10,0.92);
     z-index: 200;
     display: none;
     align-items: center;
@@ -444,14 +443,14 @@
     font-size: 11px;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: var(--fg-dim);
+    color: #c4c2bc;
   }
   .modal .close {
     position: absolute;
     top: -36px; right: 0;
     background: transparent;
     border: 0;
-    color: var(--fg);
+    color: #ededea;
     font-family: var(--mono);
     font-size: 11px;
     letter-spacing: 0.1em;
@@ -666,7 +665,7 @@
 <!-- ============ FOOTER ============ -->
 <footer>
   <span>© 2026 John Kittithat</span>
-  <span>Site — v1.1 / Made with care</span>
+  <span>Site — v1.2 / Made with care</span>
 </footer>
 
 <!-- ============ MODAL ============ -->
