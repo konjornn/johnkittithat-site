@@ -129,7 +129,7 @@
     background: var(--fg-dim);
   }
 
-  /* ---------- Showreel ---------- */
+  /* ---------- Showreel (autoplay video) ---------- */
   section.reel {
     padding: 32px;
   }
@@ -137,50 +137,40 @@
     position: relative;
     width: 100%;
     aspect-ratio: 16 / 9;
-    background: var(--bg-2);
+    background: #000;
     border: 1px solid var(--line);
     overflow: hidden;
     cursor: pointer;
-    transition: border-color .3s ease;
   }
-  .reel-frame:hover { border-color: var(--fg); }
-  .reel-frame img {
+  .reel-frame video {
     width: 100%;
     height: 100%;
     object-fit: cover;
     display: block;
-    opacity: 0.95;
-    transition: opacity .4s ease, transform .8s cubic-bezier(.2,.7,.2,1);
   }
-  .reel-frame:hover img { opacity: 1; transform: scale(1.02); }
-  .reel-placeholder {
-    position: absolute; inset: 0;
-    display: flex;
+  .reel-unmute {
+    position: absolute;
+    bottom: 16px;
+    right: 16px;
+    display: inline-flex;
     align-items: center;
-    justify-content: center;
-    background:
-      radial-gradient(ellipse at center, rgba(58,56,53,0.06), transparent 70%),
-      linear-gradient(180deg, #ebeae4, #e0ded7);
-    pointer-events: none;
-  }
-  .reel-play {
-    width: 88px; height: 88px;
-    border-radius: 50%;
-    border: 1px solid var(--fg);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all .3s ease;
+    gap: 8px;
+    padding: 10px 14px;
+    background: rgba(245,244,239,0.88);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(26,25,22,0.08);
     color: var(--fg);
-    background: rgba(245,244,239,0.6);
-    backdrop-filter: blur(6px);
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background .2s ease, transform .2s ease;
+    z-index: 2;
   }
-  .reel-frame:hover .reel-play {
-    background: var(--fg);
-    color: var(--bg);
-    transform: scale(1.05);
-  }
-  .reel-play svg { width: 20px; height: 20px; margin-left: 3px; }
+  .reel-unmute:hover { background: var(--fg); color: var(--bg); transform: translateY(-1px); }
+  .reel-unmute svg { width: 14px; height: 14px; }
   .reel-caption {
     margin-top: 14px;
     display: flex;
@@ -510,17 +500,24 @@
 
 <!-- ============ SHOWREEL ============ -->
 <section class="reel" id="reel">
-  <div class="reel-frame" id="reelTrigger" data-vimeo="1178147363">
-    <img id="reelThumb" alt="Showreel" />
-    <div class="reel-placeholder">
-      <div class="reel-play">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-      </div>
-    </div>
+  <div class="reel-frame" id="reelFrame">
+    <video id="reelVideo"
+           src="./showreel.mp4"
+           poster="./showreel-poster.jpg"
+           autoplay muted loop playsinline preload="metadata"
+           aria-label="Showreel 2026"></video>
+    <button class="reel-unmute" id="unmuteBtn" type="button" aria-label="Toggle sound">
+      <svg id="iconSound" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M11 5 6 9H2v6h4l5 4z"/>
+        <line x1="22" y1="9" x2="16" y2="15"/>
+        <line x1="16" y1="9" x2="22" y2="15"/>
+      </svg>
+      <span id="unmuteLabel">Sound off</span>
+    </button>
   </div>
   <div class="reel-caption">
-    <span>Showreel — Puriku, Bus</span>
-    <span>▶ Play</span>
+    <span>Showreel — 2026</span>
+    <span>Click video for sound</span>
   </div>
 </section>
 
@@ -697,19 +694,38 @@
     } catch (e) { return null; }
   }
 
-  // Hero showreel thumbnail
-  (async () => {
-    const trigger = document.getElementById('reelTrigger');
-    const img = document.getElementById('reelThumb');
-    const id = trigger.dataset.vimeo;
-    const url = await loadVimeoThumb(id);
-    if (url) {
-      img.src = url.replace(/_\d+x\d+/, '_1280x720');
-      img.onload = () => {
-        document.querySelector('.reel-placeholder').style.background = 'transparent';
-      };
+  // ---------- Showreel video (autoplay + click-to-unmute) ----------
+  const reelVideo = document.getElementById('reelVideo');
+  const unmuteBtn = document.getElementById('unmuteBtn');
+  const unmuteLabel = document.getElementById('unmuteLabel');
+  const iconSound = document.getElementById('iconSound');
+
+  // svg paths: muted (speaker with X) vs unmuted (speaker with waves)
+  const ICON_MUTED = '<path d="M11 5 6 9H2v6h4l5 4z"/><line x1="22" y1="9" x2="16" y2="15"/><line x1="16" y1="9" x2="22" y2="15"/>';
+  const ICON_SOUND = '<path d="M11 5 6 9H2v6h4l5 4z"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>';
+
+  function setMute(muted){
+    reelVideo.muted = muted;
+    if (muted){
+      iconSound.innerHTML = ICON_MUTED;
+      unmuteLabel.textContent = 'Sound off';
+    } else {
+      iconSound.innerHTML = ICON_SOUND;
+      unmuteLabel.textContent = 'Sound on';
     }
-  })();
+  }
+
+  unmuteBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    setMute(!reelVideo.muted);
+    reelVideo.play().catch(()=>{});
+  });
+
+  // Click on video also toggles mute
+  reelVideo.addEventListener('click', () => {
+    setMute(!reelVideo.muted);
+    reelVideo.play().catch(()=>{});
+  });
 
   // Works thumbnails
   document.querySelectorAll('.work').forEach(async (el) => {
@@ -746,9 +762,6 @@
     document.body.style.overflow = '';
   }
 
-  document.getElementById('reelTrigger').addEventListener('click', () => {
-    openVimeo('1178147363', 'Puriku, Bus');
-  });
   document.querySelectorAll('.work').forEach(w => {
     w.addEventListener('click', (e) => {
       e.preventDefault();
