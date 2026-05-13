@@ -89,6 +89,20 @@
     margin: 40px 0;
     position: relative;
   }
+  /* per-letter hover animation */
+  .hover-letters {
+    display: inline-block;
+    cursor: pointer;
+  }
+  .hover-letters .ch {
+    display: inline-block;
+    transform-origin: center bottom;
+    transition: transform .35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition-delay: calc(var(--i, 0) * 0.025s);
+  }
+  .hover-letters:hover .ch {
+    transform: translateY(-0.12em) scale(1.12);
+  }
   .hero-title .subtitle {
     display: block;
     font-family: var(--mono);
@@ -221,6 +235,10 @@
   .work {
     cursor: pointer;
     display: block;
+    transform: perspective(1200px) rotateX(0deg) rotateY(0deg);
+    transform-style: preserve-3d;
+    transition: transform .5s cubic-bezier(.2,.7,.2,1);
+    will-change: transform;
   }
   .work-thumb {
     position: relative;
@@ -228,9 +246,8 @@
     aspect-ratio: 16 / 9;
     overflow: hidden;
     background: var(--bg-2);
-    transition: transform .6s cubic-bezier(.2,.7,.2,1);
+    transform-style: preserve-3d;
   }
-  .work:hover .work-thumb { transform: translateY(-4px); }
   .work-thumb img {
     width: 100%; height: 100%;
     object-fit: cover;
@@ -244,7 +261,45 @@
     position: absolute; inset: 0;
     background: linear-gradient(180deg, transparent 60%, rgba(0,0,0,0.18));
     pointer-events: none;
+    z-index: 2;
   }
+  /* holographic gleam — follows cursor, stronger now */
+  .work-thumb::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(
+        circle at var(--bg-x, 50%) var(--bg-y, 50%),
+        rgba(255,255,255,0.55) 0%,
+        rgba(255,250,240,0.22) 28%,
+        transparent 60%
+      );
+    opacity: 0;
+    transition: opacity .35s ease;
+    pointer-events: none;
+    mix-blend-mode: overlay;
+    z-index: 3;
+  }
+  .work:hover .work-thumb::before { opacity: 1; }
+  /* subtle outer glow appearing on hover */
+  .work::after {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    background: radial-gradient(
+      400px circle at var(--x, 50%) var(--y, 50%),
+      rgba(26,25,22,0.08),
+      transparent 40%
+    );
+    opacity: 0;
+    transition: opacity .4s ease;
+    pointer-events: none;
+    z-index: -1;
+  }
+  .work { position: relative; }
+  .work:hover::after { opacity: 1; }
   .work-thumb .ph {
     position: absolute; inset: 0;
     display: flex; align-items: center; justify-content: center;
@@ -375,15 +430,40 @@
     letter-spacing: 0.04em;
   }
   .contact .links a {
+    position: relative;
+    overflow: hidden;
     display: inline-flex;
     align-items: center;
     gap: 8px;
     border-bottom: 1px solid var(--line);
-    padding-bottom: 10px;
+    padding: 10px 4px;
     transition: border-color .2s ease, color .2s ease;
+    isolation: isolate;
+  }
+  /* shine sweep on hover */
+  .contact .links a::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      120deg,
+      transparent 25%,
+      rgba(26,25,22,0.18) 50%,
+      transparent 75%
+    );
+    background-size: 250% 250%;
+    background-position: 200% 0;
+    background-repeat: no-repeat;
+    transition: background-position 0s ease;
+    pointer-events: none;
+    z-index: -1;
+  }
+  .contact .links a:hover::before {
+    background-position: -100% 0;
+    transition: background-position 1s ease;
   }
   .contact .links a:hover { border-color: var(--fg); }
-  .contact .links a .label { color: var(--fg-dim); width: 80px; flex-shrink: 0; }
+  .contact .links a .label { color: var(--fg-dim); width: 90px; flex-shrink: 0; }
   .contact .links a .val { color: var(--fg); }
   .contact .links a .arrow {
     margin-left: auto;
@@ -485,7 +565,7 @@
   </div>
 
   <h1 class="hero-title">
-    JohnKittithat
+    <span class="hover-letters" id="heroName" aria-label="JohnKittithat">JohnKittithat</span>
     <span class="subtitle">— Film Director</span>
   </h1>
 
@@ -651,9 +731,9 @@
       <span class="val">vimeo.com/johnkittithat</span>
       <span class="arrow">↗</span>
     </a>
-    <a href="#">
-      <span class="label">Studio</span>
-      <span class="val">Songmue Production — Bangkok</span>
+    <a href="tel:+66971433696">
+      <span class="label">Producer</span>
+      <span class="val">K.Beam Thongkorn · +66 97-143-3696</span>
       <span class="arrow">↗</span>
     </a>
   </div>
@@ -675,6 +755,21 @@
 </div>
 
 <script>
+  // ---------- Split headline into per-letter spans for hover animation ----------
+  (() => {
+    const target = document.getElementById('heroName');
+    if (!target) return;
+    const text = target.textContent;
+    target.textContent = '';
+    [...text].forEach((ch, i) => {
+      const span = document.createElement('span');
+      span.className = 'ch';
+      span.style.setProperty('--i', i);
+      span.textContent = ch === ' ' ? ' ' : ch;
+      target.appendChild(span);
+    });
+  })();
+
   // ---------- Clock (BKK) ----------
   function updateTime(){
     const d = new Date();
@@ -768,6 +863,48 @@
       openVimeo(w.dataset.vimeo, w.dataset.title);
     });
   });
+
+  // ---------- Holographic 3D tilt on work tiles ----------
+  // Tuned subtle for MUJI minimal feel — gentle tilt + cursor-follow gleam.
+  // Disabled on touch devices and when user prefers reduced motion.
+  const supportsHover = window.matchMedia('(hover: hover)').matches;
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (supportsHover && !reducedMotion) {
+    document.querySelectorAll('.work').forEach(card => {
+      let rafId = null;
+
+      card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const cx = rect.width / 2;
+        const cy = rect.height / 2;
+
+        // Stronger tilt: max ~12 degrees on the corners
+        const rotateX = ((y - cy) / cy) * -12;
+        const rotateY = ((x - cx) / cx) * 12;
+
+        cancelAnimationFrame(rafId);
+        rafId = requestAnimationFrame(() => {
+          card.style.setProperty('--x', `${x}px`);
+          card.style.setProperty('--y', `${y}px`);
+          card.style.setProperty('--bg-x', `${(x / rect.width) * 100}%`);
+          card.style.setProperty('--bg-y', `${(y / rect.height) * 100}%`);
+          card.style.transform =
+            `perspective(900px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-6px) scale(1.02)`;
+        });
+      });
+
+      card.addEventListener('mouseleave', () => {
+        cancelAnimationFrame(rafId);
+        card.style.transform = 'perspective(1200px) rotateX(0deg) rotateY(0deg)';
+        card.style.setProperty('--bg-x', '50%');
+        card.style.setProperty('--bg-y', '50%');
+      });
+    });
+  }
+
   closeBtn.addEventListener('click', closeModal);
   modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
