@@ -6,21 +6,34 @@
 <title>JohnKittithat — Film Director</title>
 <meta name="description" content="JohnKittithat — Film Director. Selected works, showreel, and contact." />
 <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
-<link rel="icon" type="image/svg+xml" href='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2222%22 fill=%22%23f5f4ef%22/><text x=%2250%22 y=%2250%22 font-family=%22-apple-system,Helvetica,Arial,sans-serif%22 font-weight=%22600%22 font-size=%2246%22 fill=%22%231a1916%22 text-anchor=%22middle%22 dominant-baseline=%22central%22 letter-spacing=%22-2%22>JK</text></svg>' />
+<link rel="icon" type="image/svg+xml" href='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2222%22 fill=%22%23f6f1e7%22/><text x=%2250%22 y=%2250%22 font-family=%22-apple-system,Helvetica,Arial,sans-serif%22 font-weight=%22600%22 font-size=%2246%22 fill=%22%23221c14%22 text-anchor=%22middle%22 dominant-baseline=%22central%22 letter-spacing=%22-2%22>JK</text></svg>' />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@300;400;500&family=IBM+Plex+Sans+Thai:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #f5f4ef;         /* warm off-white, MUJI feel */
-    --bg-2: #ebeae4;       /* secondary surface */
-    --fg: #1a1916;         /* warm near-black */
-    --fg-dim: #8a8782;     /* warm grey */
-    --line: #d8d6cf;       /* warm line */
-    --accent: #3a3835;
+    --bg: #f6f1e7;         /* mostly white, hint of nude warmth */
+    --bg-2: #ece6d8;       /* secondary surface */
+    --fg: #221c14;         /* deep warm near-black */
+    --fg-dim: #918577;     /* warm taupe (lighter) */
+    --line: #ddd3c0;       /* warm line (lighter) */
+    --accent: #c4a378;     /* champagne accent for glow */
     --display: 'Geist', 'IBM Plex Sans Thai', system-ui, -apple-system, sans-serif;
     --sans: 'Geist', 'IBM Plex Sans Thai', system-ui, -apple-system, sans-serif;
     --mono: 'Geist Mono', ui-monospace, 'JetBrains Mono', monospace;
+  }
+
+  /* ---------- Ambient nude glows (fixed in viewport, softer) ---------- */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: -1;
+    background:
+      radial-gradient(800px 600px at 18% 28%, rgba(215,190,155,0.32), transparent 65%),
+      radial-gradient(700px 550px at 82% 68%, rgba(225,205,175,0.25), transparent 65%),
+      radial-gradient(500px 400px at 50% 100%, rgba(200,178,148,0.20), transparent 60%);
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -50,7 +63,7 @@
     padding: 22px 32px;
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    background: rgba(245,244,239,0.7);
+    background: rgba(246,241,231,0.75);
     border-bottom: 1px solid var(--line);
     font-family: var(--mono);
     font-size: 11px;
@@ -143,18 +156,75 @@
     background: var(--fg-dim);
   }
 
-  /* ---------- Showreel (autoplay video) ---------- */
+  /* ---------- Showreel (scroll-driven 3D card) ---------- */
   section.reel {
-    padding: 32px;
+    padding: 60px 32px 80px;
+    min-height: 110vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0;
+  }
+  .reel-title-block {
+    text-align: center;
+    max-width: 900px;
+    margin: 0 auto;
+    transform: translateY(var(--title-ty, 0));
+    will-change: transform;
+  }
+  .reel-eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--fg-dim);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .reel-headline {
+    font-family: var(--display);
+    font-weight: 500;
+    font-size: clamp(26px, 4.5vw, 56px);
+    line-height: 1;
+    letter-spacing: -0.01em;
+    color: var(--fg);
+    text-transform: uppercase;
+  }
+  .reel-card-stage {
+    width: 100%;
+    max-width: 1280px;
+    perspective: 1000px;
+    margin: -20px auto 0;
+  }
+  .reel-card {
+    width: 100%;
+    background: #222;
+    border: 4px solid #4a4a48;
+    border-radius: 28px;
+    padding: 10px;
+    box-shadow:
+      0 9px 20px rgba(0,0,0,0.18),
+      0 37px 37px rgba(0,0,0,0.14),
+      0 84px 50px rgba(0,0,0,0.08),
+      0 149px 60px rgba(0,0,0,0.04);
+    transform-origin: center top;
+    transform: rotateX(var(--card-rx, 20deg)) scale(var(--card-sc, 1.05));
+    will-change: transform;
+  }
+  @media (max-width: 760px) {
+    .reel-card { padding: 6px; border-radius: 20px; border-width: 3px; }
   }
   .reel-frame {
     position: relative;
     width: 100%;
     aspect-ratio: 16 / 9;
     background: #000;
-    border: 1px solid var(--line);
+    border-radius: 18px;
     overflow: hidden;
     cursor: pointer;
+  }
+  @media (max-width: 760px) {
+    .reel-frame { border-radius: 14px; }
   }
   .reel-frame video {
     width: 100%;
@@ -230,7 +300,7 @@
     padding: 0 32px 80px;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 24px;
+    gap: 12px;
   }
   .work {
     cursor: pointer;
@@ -256,6 +326,20 @@
     opacity: 0.95;
   }
   .work:hover .work-thumb img { transform: scale(1.04); opacity: 1; }
+  /* hover-to-play Vimeo preview iframe */
+  .work-preview {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    pointer-events: none;
+    z-index: 4;
+    opacity: 0;
+    transition: opacity .4s ease;
+    background: #000;
+  }
+  .work-preview.ready { opacity: 1; }
   .work-thumb::after {
     content: '';
     position: absolute; inset: 0;
@@ -317,9 +401,9 @@
   }
   .work-info .title {
     font-family: var(--display);
-    font-weight: 500;
-    font-size: clamp(15px, 1.2vw, 19px);
-    letter-spacing: -0.01em;
+    font-weight: 700;
+    font-size: clamp(11px, 0.85vw, 14px);
+    letter-spacing: 0.01em;
     line-height: 1.2;
   }
   .work-info .meta {
@@ -329,6 +413,26 @@
     letter-spacing: 0.08em;
     text-transform: uppercase;
     white-space: nowrap;
+  }
+
+  /* ----- Works section: uppercase + dark grey + gradient stroke ----- */
+  #work h2,
+  #work .num,
+  #work .count,
+  .works .work-info .title {
+    text-transform: uppercase;
+    color: #4a4136; /* warm dark grey — harmonizes with nude bg */
+  }
+  .works .work-info .title {
+    letter-spacing: 0.02em;
+  }
+  .works .work-info .meta {
+    color: #6e6357; /* slightly lighter warm grey */
+  }
+  /* gradient white-to-grey stroke on all 9 thumbs — thicker */
+  .works .work-thumb {
+    border: 2.5px solid;
+    border-image: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(210,200,180,0.7) 45%, rgba(110,100,85,0.55) 100%) 1;
   }
 
   /* light warm fallback gradients */
@@ -381,6 +485,25 @@
     color: var(--fg);
   }
   .about .col-r em { color: var(--fg-dim); font-style: normal; }
+
+  /* ---------- Blur text reveal (triggered when in viewport) ---------- */
+  [data-blur] {
+    /* parent stays static; only word spans animate */
+  }
+  [data-blur] .bw {
+    display: inline-block;
+    opacity: 0;
+    filter: blur(12px);
+    transform: translateY(4px);
+    transition: opacity .7s ease, filter .7s ease, transform .7s ease;
+    transition-delay: calc(var(--i, 0) * 0.04s);
+    white-space: pre;
+  }
+  [data-blur].reveal .bw {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(0);
+  }
 
   /* ---------- Clients marquee ---------- */
   .clients {
@@ -528,6 +651,183 @@
     cursor: pointer;
   }
 
+  /* ---------- Cover (WebGL shader hero) ---------- */
+  .cover {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    background: #000;
+    isolation: isolate;
+  }
+  .cover canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    touch-action: pan-y;
+    z-index: 0;
+  }
+  .cover .overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 80px 32px 60px;
+    text-align: center;
+    pointer-events: none; /* let pointer events reach canvas for shader interactivity */
+  }
+  .cover .overlay > *,
+  .cover .btn { pointer-events: auto; }
+  /* subtle vignette to focus text */
+  .cover::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,0.55) 100%),
+      linear-gradient(180deg, rgba(0,0,0,0.2), transparent 20%, transparent 80%, rgba(0,0,0,0.6));
+    pointer-events: none;
+    z-index: 1;
+  }
+  .cover .head {
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: clamp(28px, 5vw, 78px);
+    line-height: 1.05;
+    letter-spacing: -0.025em;
+    color: #f5f0e3;
+    max-width: 1100px;
+  }
+  .cover .head .l1 {
+    display: block;
+    background: linear-gradient(90deg, #f8eed7 0%, #e9c897 50%, #d6a571 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    opacity: 0;
+    transform: translateY(24px);
+    animation: cover-rise .9s cubic-bezier(.2,.7,.2,1) .25s forwards;
+  }
+  .cover .head .l2 {
+    display: block;
+    background: linear-gradient(90deg, #e9c897 0%, #d6a571 50%, #b88656 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    opacity: 0;
+    transform: translateY(24px);
+    animation: cover-rise .9s cubic-bezier(.2,.7,.2,1) .45s forwards;
+    margin-top: 4px;
+  }
+  .cover .sub {
+    color: rgba(245,244,239,0.78);
+    font-family: var(--sans);
+    font-weight: 300;
+    font-size: clamp(13px, 1.2vw, 18px);
+    line-height: 1.6;
+    max-width: 720px;
+    margin: 28px auto 0;
+    opacity: 0;
+    transform: translateY(24px);
+    animation: cover-rise .9s cubic-bezier(.2,.7,.2,1) .7s forwards;
+  }
+  .cover .sub .sub-name {
+    color: #fdf6e6;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+  .cover .ctas {
+    display: flex;
+    gap: 14px;
+    margin-top: 36px;
+    flex-wrap: wrap;
+    justify-content: center;
+    opacity: 0;
+    transform: translateY(24px);
+    animation: cover-rise .9s cubic-bezier(.2,.7,.2,1) .9s forwards;
+  }
+  .cover .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 26px;
+    border-radius: 9999px;
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: transform .3s ease, background .3s ease, color .3s ease, border-color .3s ease;
+    border: 1px solid transparent;
+  }
+  /* Both buttons: ghost by default, fill cream on hover */
+  .cover .btn-primary,
+  .cover .btn-secondary {
+    background: rgba(245,240,227,0.04);
+    color: #f5f0e3;
+    border-color: rgba(245,240,227,0.4);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+  .cover .btn-primary:hover,
+  .cover .btn-secondary:hover {
+    transform: translateY(-2px) scale(1.02);
+    background: #fdf6e6;
+    color: #221c14;
+    border-color: #fdf6e6;
+  }
+  .cover .btn .arrow { transition: transform .3s ease; }
+  .cover .btn:hover .arrow { transform: translate(3px, -3px); }
+
+  /* scroll hint at bottom of cover */
+  .cover .scroll-cue {
+    position: absolute;
+    bottom: 28px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: rgba(245,244,239,0.6);
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    z-index: 3;
+    opacity: 0;
+    animation: cover-rise .9s cubic-bezier(.2,.7,.2,1) 1.2s forwards;
+  }
+  .cover .scroll-cue::after {
+    content: '';
+    width: 1px;
+    height: 28px;
+    background: linear-gradient(to bottom, rgba(245,244,239,0.5), transparent);
+    animation: scroll-line 2.2s ease-in-out infinite;
+  }
+  @keyframes scroll-line {
+    0% { transform: translateY(-8px); opacity: 0; }
+    40% { opacity: 1; }
+    100% { transform: translateY(8px); opacity: 0; }
+  }
+  @keyframes cover-rise {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* nav over cover: invert to light text on dark */
+  body.cover-active nav {
+    background: rgba(0,0,0,0.25);
+    border-bottom-color: rgba(255,255,255,0.08);
+  }
+  body.cover-active nav .brand,
+  body.cover-active nav ul a { color: rgba(245,244,239,0.85); }
+  body.cover-active nav ul a:hover { color: #fff; }
+
   /* ---------- Responsive ---------- */
   @media (max-width: 960px) {
     .works { grid-template-columns: repeat(2, 1fr); }
@@ -557,6 +857,25 @@
   </ul>
 </nav>
 
+<!-- ============ COVER (WebGL shader) ============ -->
+<section class="cover" id="cover">
+  <canvas id="shaderCanvas"></canvas>
+  <div class="overlay">
+    <h1 class="head">
+      <span class="l1">Film Director &amp; Creativity.</span>
+      <span class="l2">Available For Your Brand Films</span>
+    </h1>
+    <p class="sub">
+      <strong class="sub-name">JohnKittithat</strong> — Film Director at Songmue Production. Crafting visually driven stories and culturally memorable brand film campaigns.
+    </p>
+    <div class="ctas">
+      <a href="#reel" class="btn btn-primary">Film's Work <span class="arrow">↗</span></a>
+      <a href="#about" class="btn btn-secondary">About John <span class="arrow">↗</span></a>
+    </div>
+  </div>
+  <div class="scroll-cue">Scroll</div>
+</section>
+
 <!-- ============ HERO ============ -->
 <header class="hero">
   <div class="hero-meta">
@@ -580,22 +899,30 @@
 
 <!-- ============ SHOWREEL ============ -->
 <section class="reel" id="reel">
-  <div class="reel-frame" id="reelFrame">
-    <video id="reelVideo"
-           src="./showreel.mp4"
-           poster="./showreel-poster.jpg"
-           autoplay muted loop playsinline preload="metadata"
-           aria-label="Showreel 2026"></video>
-    <button class="reel-unmute" id="unmuteBtn" type="button" aria-label="Toggle sound">
-      <svg id="iconSound" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M11 5 6 9H2v6h4l5 4z"/>
-        <line x1="22" y1="9" x2="16" y2="15"/>
-        <line x1="16" y1="9" x2="22" y2="15"/>
-      </svg>
-      <span id="unmuteLabel">Sound off</span>
-    </button>
+  <div class="reel-title-block" id="reelTitleBlock">
+    <p class="reel-eyebrow">Now Playing</p>
+    <h2 class="reel-headline">Showreel 2026</h2>
   </div>
-  <div class="reel-caption">
+  <div class="reel-card-stage">
+    <div class="reel-card" id="reelCard">
+      <div class="reel-frame" id="reelFrame">
+        <video id="reelVideo"
+               src="./showreel.mp4"
+               poster="./showreel-poster.jpg"
+               autoplay muted loop playsinline preload="metadata"
+               aria-label="Showreel 2026"></video>
+        <button class="reel-unmute" id="unmuteBtn" type="button" aria-label="Toggle sound">
+          <svg id="iconSound" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M11 5 6 9H2v6h4l5 4z"/>
+            <line x1="22" y1="9" x2="16" y2="15"/>
+            <line x1="16" y1="9" x2="22" y2="15"/>
+          </svg>
+          <span id="unmuteLabel">Sound off</span>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="reel-caption" style="width: 100%; max-width: 1280px; margin-top: 20px;">
     <span>Showreel — 2026</span>
     <span>Click video for sound</span>
   </div>
@@ -696,11 +1023,11 @@
     <p style="margin-top:18px;">Available for<br>commercials · brand films<br>music videos · features</p>
   </div>
   <div class="col-r">
-    <p class="lead">Make ads people don't skip.</p>
-    <p>John is a director at <em>Songmue Production</em>, bringing creativity and vision to every project — making ads that customers easily remember and never forget, in his own unique way.</p>
-    <p>He likes to explore storytelling with new techniques — <em>VFX, camera movement, visual design</em> — so people don't skip his ads. His ideas live on upcoming trends and always reflect back to branding recognition.</p>
-    <p>Representing the key selling point clearly and sensationally, he helps brands promote sales and make ads run the world — getting to the point and going viral.</p>
-    <p>Most of all, he likes to make people happy working with him, exploring new ways of work with passion. He helps teams create something new, <em>without limitation</em>, always thinking of ways to push the work further than before.</p>
+    <p class="lead" data-blur>Creativity. Unique. Catchy.</p>
+    <p data-blur>John is a director at <em>Songmue Production</em>, bringing creativity and vision to every project — making ads that customers easily remember and never forget, in his own unique way.</p>
+    <p data-blur>He likes to explore storytelling with new techniques — <em>VFX, camera movement, visual design</em> — so people don't skip his ads. His ideas live on upcoming trends and always reflect back to branding recognition.</p>
+    <p data-blur>Representing the key selling point clearly and sensationally, he helps brands promote sales and make ads run the world — getting to the point and going viral.</p>
+    <p data-blur>Most of all, he likes to make people happy working with him, exploring new ways of work with passion. He helps teams create something new, <em>without limitation</em>, always thinking of ways to push the work further than before.</p>
   </div>
 </section>
 
@@ -755,6 +1082,152 @@
 </div>
 
 <script>
+  // ---------- WebGL shader cover (cloud/nebula) ----------
+  // GLSL source — adapted from Matthias Hurrle (@atzedent)
+  const SHADER_VERT = `#version 300 es
+precision highp float;
+in vec4 position;
+void main(){gl_Position=position;}`;
+
+  const SHADER_FRAG = `#version 300 es
+precision highp float;
+out vec4 O;
+uniform vec2 resolution;
+uniform float time;
+uniform vec2 move;
+uniform vec2 touch;
+uniform int pointerCount;
+uniform vec2 pointers[10];
+#define FC gl_FragCoord.xy
+#define T time
+#define R resolution
+#define MN min(R.x,R.y)
+float rnd(vec2 p){p=fract(p*vec2(12.9898,78.233));p+=dot(p,p+34.56);return fract(p.x*p.y);}
+float noise(in vec2 p){vec2 i=floor(p),f=fract(p),u=f*f*(3.-2.*f);float a=rnd(i),b=rnd(i+vec2(1,0)),c=rnd(i+vec2(0,1)),d=rnd(i+1.);return mix(mix(a,b,u.x),mix(c,d,u.x),u.y);}
+float fbm(vec2 p){float t=.0,a=1.;mat2 m=mat2(1.,-.5,.2,1.2);for(int i=0;i<5;i++){t+=a*noise(p);p*=2.*m;a*=.5;}return t;}
+float clouds(vec2 p){float d=1.,t=.0;for(float i=.0;i<3.;i++){float a=d*fbm(i*10.+p.x*.2+.2*(1.+i)*p.y+d+i*i+p);t=mix(t,d,a);d=a;p*=2./(i+1.);}return t;}
+void main(void){
+  vec2 uv=(FC-.5*R)/MN,st=uv*vec2(2,1);
+  vec3 col=vec3(0);
+  float bg=clouds(vec2(st.x+T*.5,-st.y));
+  uv*=1.-.3*(sin(T*.2)*.5+.5);
+  for(float i=1.;i<12.;i++){
+    uv+=.1*cos(i*vec2(.1+.01*i,.8)+i*i+T*.5+.1*uv.x);
+    vec2 p=uv;
+    float d=length(p);
+    col+=.00125/d*(cos(sin(i)*vec3(1,2,3))+1.);
+    float b=noise(i+p+bg*1.731);
+    col+=.002*b/length(max(p,vec2(b*p.x*.02,p.y)));
+    col=mix(col,vec3(bg*.25,bg*.137,bg*.05),d);
+  }
+  O=vec4(col,1);
+}`;
+
+  (function initShader(){
+    const canvas = document.getElementById('shaderCanvas');
+    const coverEl = document.getElementById('cover');
+    if (!canvas || !coverEl) return;
+    const gl = canvas.getContext('webgl2', { alpha: false, antialias: false, powerPreference: 'low-power' });
+    if (!gl) {
+      coverEl.style.background = '#0a0a0a';
+      return;
+    }
+
+    function compile(type, src){
+      const s = gl.createShader(type);
+      gl.shaderSource(s, src); gl.compileShader(s);
+      if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) {
+        console.error('shader:', gl.getShaderInfoLog(s));
+        gl.deleteShader(s); return null;
+      }
+      return s;
+    }
+    const vs = compile(gl.VERTEX_SHADER, SHADER_VERT);
+    const fs = compile(gl.FRAGMENT_SHADER, SHADER_FRAG);
+    if (!vs || !fs) return;
+
+    const prog = gl.createProgram();
+    gl.attachShader(prog, vs);
+    gl.attachShader(prog, fs);
+    gl.linkProgram(prog);
+    if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) {
+      console.error('link:', gl.getProgramInfoLog(prog));
+      return;
+    }
+
+    const buf = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,1,-1,-1,1,1,1,-1]), gl.STATIC_DRAW);
+    const posLoc = gl.getAttribLocation(prog, 'position');
+    gl.enableVertexAttribArray(posLoc);
+    gl.vertexAttribPointer(posLoc, 2, gl.FLOAT, false, 0, 0);
+
+    const u_res = gl.getUniformLocation(prog, 'resolution');
+    const u_time = gl.getUniformLocation(prog, 'time');
+    const u_move = gl.getUniformLocation(prog, 'move');
+    const u_touch = gl.getUniformLocation(prog, 'touch');
+    const u_pcount = gl.getUniformLocation(prog, 'pointerCount');
+    const u_pcoords = gl.getUniformLocation(prog, 'pointers');
+
+    let move = [0, 0];
+    let touch = [0, 0];
+    let pcoords = new Float32Array(20); // 10 pointers max
+
+    function resize(){
+      const dpr = Math.max(1, 0.5 * (window.devicePixelRatio || 1));
+      canvas.width = Math.floor(window.innerWidth * dpr);
+      canvas.height = Math.floor(window.innerHeight * dpr);
+      gl.viewport(0, 0, canvas.width, canvas.height);
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    canvas.addEventListener('pointermove', (e) => {
+      const rect = canvas.getBoundingClientRect();
+      const sx = canvas.width / rect.width;
+      const sy = canvas.height / rect.height;
+      touch = [(e.clientX - rect.left) * sx, canvas.height - (e.clientY - rect.top) * sy];
+      move[0] += (e.movementX || 0) * 0.5;
+      move[1] += (e.movementY || 0) * 0.5;
+    }, { passive: true });
+
+    let rafId = null;
+    let running = false;
+    function loop(now){
+      gl.clearColor(0,0,0,1);
+      gl.clear(gl.COLOR_BUFFER_BIT);
+      gl.useProgram(prog);
+      gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+      gl.uniform2f(u_res, canvas.width, canvas.height);
+      gl.uniform1f(u_time, now * 1e-3);
+      gl.uniform2f(u_move, move[0], move[1]);
+      gl.uniform2f(u_touch, touch[0], touch[1]);
+      gl.uniform1i(u_pcount, 0);
+      gl.uniform2fv(u_pcoords, pcoords);
+      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+      rafId = requestAnimationFrame(loop);
+    }
+    function start(){ if (!running){ running = true; rafId = requestAnimationFrame(loop); } }
+    function stop(){ if (running){ running = false; cancelAnimationFrame(rafId); rafId = null; } }
+
+    // pause when off-screen to save battery; toggle nav theme too
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting && e.intersectionRatio > 0.1) {
+          document.body.classList.add('cover-active');
+          start();
+        } else {
+          document.body.classList.remove('cover-active');
+          stop();
+        }
+      });
+    }, { threshold: [0, 0.1, 0.3] });
+    io.observe(coverEl);
+
+    document.body.classList.add('cover-active');
+    start();
+  })();
+
   // ---------- Split headline into per-letter spans for hover animation ----------
   (() => {
     const target = document.getElementById('heroName');
@@ -857,10 +1330,48 @@
     document.body.style.overflow = '';
   }
 
+  // ---------- Hover-to-play Vimeo preview ----------
+  // Use Vimeo's background mode for clean autoplay loop without UI.
+  // Disabled on touch devices (no hover).
+  const supportsHoverPreview = window.matchMedia('(hover: hover)').matches;
   document.querySelectorAll('.work').forEach(w => {
     w.addEventListener('click', (e) => {
       e.preventDefault();
       openVimeo(w.dataset.vimeo, w.dataset.title);
+    });
+
+    if (!supportsHoverPreview) return;
+
+    let iframe = null;
+    let enterTimeout = null;
+
+    w.addEventListener('mouseenter', () => {
+      // Slight delay so quick mouse swipes don't trigger embed loads
+      enterTimeout = setTimeout(() => {
+        if (iframe) return;
+        const id = w.dataset.vimeo;
+        iframe = document.createElement('iframe');
+        iframe.className = 'work-preview';
+        iframe.src = `https://player.vimeo.com/video/${id}?autoplay=1&muted=1&loop=1&background=1&controls=0&autopause=0`;
+        iframe.setAttribute('allow', 'autoplay; fullscreen; picture-in-picture');
+        iframe.setAttribute('frameborder', '0');
+        iframe.setAttribute('tabindex', '-1');
+        iframe.setAttribute('aria-hidden', 'true');
+        const thumb = w.querySelector('.work-thumb');
+        thumb.appendChild(iframe);
+        // fade in once loaded
+        iframe.addEventListener('load', () => {
+          requestAnimationFrame(() => iframe && iframe.classList.add('ready'));
+        });
+      }, 150);
+    });
+
+    w.addEventListener('mouseleave', () => {
+      clearTimeout(enterTimeout);
+      if (iframe) {
+        iframe.remove();
+        iframe = null;
+      }
     });
   });
 
@@ -908,6 +1419,91 @@
   closeBtn.addEventListener('click', closeModal);
   modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+
+  // ---------- Blur text reveal when in viewport ----------
+  (() => {
+    function wrapWords(node, counter){
+      if (node.nodeType === Node.TEXT_NODE){
+        const text = node.textContent;
+        if (!text.trim()) return;
+        const parent = node.parentNode;
+        const frag = document.createDocumentFragment();
+        const parts = text.split(/(\s+)/);
+        parts.forEach(part => {
+          if (part === '') return;
+          if (/^\s+$/.test(part)){
+            frag.appendChild(document.createTextNode(part));
+          } else {
+            const span = document.createElement('span');
+            span.className = 'bw';
+            span.style.setProperty('--i', counter.val++);
+            span.textContent = part;
+            frag.appendChild(span);
+          }
+        });
+        parent.replaceChild(frag, node);
+      } else if (node.nodeType === Node.ELEMENT_NODE) {
+        [...node.childNodes].forEach(c => wrapWords(c, counter));
+      }
+    }
+
+    const targets = document.querySelectorAll('[data-blur]');
+    targets.forEach(el => {
+      const counter = { val: 0 };
+      wrapWords(el, counter);
+    });
+
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting){
+          e.target.classList.add('reveal');
+        } else {
+          e.target.classList.remove('reveal');
+        }
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -8% 0px' });
+
+    targets.forEach(el => obs.observe(el));
+  })();
+
+  // ---------- Scroll-driven 3D card for Showreel ----------
+  (() => {
+    const section = document.getElementById('reel');
+    const card = document.getElementById('reelCard');
+    const title = document.getElementById('reelTitleBlock');
+    if (!section || !card || !title) return;
+
+    const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+    let ticking = false;
+
+    function update(){
+      const rect = section.getBoundingClientRect();
+      const vh = window.innerHeight;
+      // 0 when section top at bottom of viewport, 1 when section top reached viewport top
+      const progress = clamp((vh - rect.top) / vh, 0, 1);
+
+      // Card: rotateX 20° → 0°, scale 1.05 → 1
+      const rx = 20 - progress * 20;
+      const sc = 1.05 - progress * 0.05;
+      // Title: translateY 0 → -80px (subtle parallax)
+      const ty = -progress * 80;
+
+      card.style.setProperty('--card-rx', rx + 'deg');
+      card.style.setProperty('--card-sc', sc);
+      title.style.setProperty('--title-ty', ty + 'px');
+
+      ticking = false;
+    }
+    function onScroll(){
+      if (!ticking){
+        ticking = true;
+        requestAnimationFrame(update);
+      }
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    update();
+  })();
 </script>
 
 </body>
