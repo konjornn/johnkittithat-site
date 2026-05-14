@@ -9,7 +9,7 @@
 <link rel="icon" type="image/svg+xml" href='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2222%22 fill=%22%23f6f1e7%22/><text x=%2250%22 y=%2250%22 font-family=%22-apple-system,Helvetica,Arial,sans-serif%22 font-weight=%22600%22 font-size=%2246%22 fill=%22%23221c14%22 text-anchor=%22middle%22 dominant-baseline=%22central%22 letter-spacing=%22-2%22>JK</text></svg>' />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@300;400;500&family=IBM+Plex+Sans+Thai:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@300;400;500&family=IBM+Plex+Sans+Thai:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
   :root {
     --bg: #f6f1e7;         /* mostly white, hint of nude warmth */
@@ -47,12 +47,6 @@
     line-height: 1.55;
     -webkit-font-smoothing: antialiased;
     overflow-x: hidden;
-    overflow-y: hidden; /* locked while cover is visible */
-    height: 100vh;
-  }
-  body.no-cover {
-    overflow-y: auto;
-    height: auto;
   }
 
   a { color: inherit; text-decoration: none; }
@@ -189,10 +183,10 @@
   }
   .reel-headline {
     font-family: var(--display);
-    font-weight: 500;
+    font-weight: 700;
     font-size: clamp(26px, 4.5vw, 56px);
     line-height: 1;
-    letter-spacing: -0.01em;
+    letter-spacing: -0.015em;
     color: var(--fg);
     text-transform: uppercase;
   }
@@ -272,12 +266,13 @@
     text-transform: uppercase;
   }
 
-  /* ---------- Section heading ---------- */
+  /* ---------- Section heading (grid: equal sides, truly centered h2) ---------- */
   .section-head {
     padding: 120px 32px 40px;
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
     align-items: baseline;
+    gap: 16px;
     border-top: 1px solid var(--line);
     margin-top: 80px;
   }
@@ -286,19 +281,22 @@
     font-size: 11px;
     color: var(--fg-dim);
     letter-spacing: 0.08em;
+    text-align: left;
   }
   .section-head h2 {
     font-family: var(--display);
-    font-weight: 500;
+    font-weight: 700;
     font-size: clamp(36px, 6vw, 84px);
     line-height: 0.95;
     letter-spacing: -0.035em;
+    text-align: center;
   }
   .section-head .count {
     font-family: var(--mono);
     font-size: 11px;
     color: var(--fg-dim);
     letter-spacing: 0.08em;
+    text-align: right;
   }
 
   /* ---------- Works grid 3x3 ---------- */
@@ -511,6 +509,170 @@
     transform: translateY(0);
   }
 
+  /* ---------- Work History (2 columns: Film Commercial / Feature Film) ---------- */
+  .history {
+    padding: 0 32px 100px;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 48px;
+  }
+  .history-col h3 {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--fg-dim);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 4px;
+  }
+  .history-entry {
+    padding: 20px 0;
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .history-year {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--fg-dim);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .history-name {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: clamp(15px, 1.3vw, 19px);
+    letter-spacing: 0.01em;
+    color: var(--fg);
+    text-transform: uppercase;
+    line-height: 1.25;
+  }
+  .history-role {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--fg-dim);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .history-th {
+    color: var(--fg-dim);
+    font-family: var(--sans);
+    font-weight: 400;
+    text-transform: none;
+    font-size: 0.85em;
+    margin-left: 6px;
+  }
+  @media (max-width: 760px) {
+    .history {
+      padding: 0 20px 60px;
+      grid-template-columns: 1fr;
+      gap: 32px;
+    }
+  }
+
+  /* ---------- Awards (one big laurel + inline minimal list) ---------- */
+  .awards {
+    padding: 0 32px 100px;
+    max-width: 980px;
+    margin: 0 auto;
+    width: 100%;
+    text-align: center;
+  }
+  .awards-laurel {
+    width: clamp(180px, 22vw, 280px);
+    height: auto;
+    margin: 0 auto 28px;
+    display: block;
+  }
+  .awards-line {
+    font-family: var(--display);
+    font-weight: 500;
+    font-size: clamp(13px, 1.2vw, 17px);
+    line-height: 2;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    max-width: 880px;
+    margin: 0 auto;
+    text-align: center;
+
+    /* Shining-text gradient sweep (loop) */
+    background: linear-gradient(
+      110deg,
+      #6e6357 0%,
+      #6e6357 30%,
+      #ffffff 50%,
+      #6e6357 70%,
+      #6e6357 100%
+    );
+    background-size: 220% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    animation: awards-shine 3.5s linear infinite;
+  }
+  @keyframes awards-shine {
+    0%   { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+  /* keep each award (tier + name + year) on one line — no mid-award breaks */
+  .awards-line .award-item {
+    display: inline-block;
+    white-space: nowrap;
+  }
+  .awards-line .dot {
+    margin: 0 12px;
+    font-weight: 300;
+    /* inherit shine */
+  }
+  .awards-line .tier {
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    /* shines too — gradient applied to parent */
+  }
+  @media (max-width: 600px) {
+    .awards { padding: 0 20px 60px; }
+  }
+
+  /* ---------- Songmue Production logo block (real PNG) ---------- */
+  .studio-mark {
+    text-align: center;
+    padding: 80px 32px 60px;
+    position: relative;
+  }
+  .studio-mark .stamp {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--fg-dim);
+    margin-bottom: 22px;
+  }
+  .studio-mark .logo {
+    max-width: clamp(110px, 16vw, 210px);
+    width: 100%;
+    height: auto;
+    display: inline-block;
+    /* the logo is black — blend into the warm nude using a slight multiply mix */
+    opacity: 0.92;
+  }
+  .studio-mark .tagline {
+    margin-top: 26px;
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--fg-dim);
+  }
+  @media (max-width: 760px) {
+    .studio-mark { padding: 60px 20px 40px; }
+  }
+
   /* ---------- Clients marquee ---------- */
   .clients {
     border-top: 1px solid var(--line);
@@ -657,20 +819,14 @@
     cursor: pointer;
   }
 
-  /* ---------- Cover (WebGL shader hero — fullscreen overlay) ---------- */
+  /* ---------- Cover (WebGL shader hero — scrollable) ---------- */
   .cover {
-    position: fixed;
-    inset: 0;
-    z-index: 60;
+    position: relative;
+    width: 100%;
+    height: 100vh;
     overflow: hidden;
     background: #000;
     isolation: isolate;
-    transition: opacity .8s cubic-bezier(.2,.7,.2,1), transform .8s cubic-bezier(.2,.7,.2,1);
-  }
-  .cover.dismiss {
-    opacity: 0;
-    transform: scale(0.96);
-    pointer-events: none;
   }
   .cover canvas {
     position: absolute;
@@ -848,9 +1004,19 @@
     nav { padding: 16px 20px; }
     nav ul { gap: 16px; }
     header.hero { padding: 100px 20px 24px; }
-    section.reel { padding: 20px; }
-    .section-head { padding: 80px 20px 24px; }
-    .works { padding: 0 20px 60px; grid-template-columns: 1fr; gap: 24px; }
+    section.reel {
+      padding: 40px 20px 24px;
+      min-height: auto;       /* drop the 110vh that creates huge gap on mobile */
+    }
+    .reel-card-stage { margin-top: 16px; }
+    .reel-card { transform: none !important; }  /* skip 3D tilt on mobile, less awkward at narrow widths */
+    .reel-title-block { transform: none !important; }
+    .section-head { padding: 60px 20px 20px; margin-top: 32px; }
+    .works {
+      padding: 0 20px 40px;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
     .about { padding: 0 20px 80px; grid-template-columns: 1fr; gap: 24px; }
     .about .col-l { position: static; }
     .contact { padding: 80px 20px; grid-template-columns: 1fr; gap: 32px; }
@@ -881,10 +1047,11 @@
       <strong class="sub-name">JohnKittithat</strong> — Film Director at Songmue Production. Crafting visually driven stories and culturally memorable brand film campaigns.
     </p>
     <div class="ctas">
-      <a href="#hero" class="btn btn-primary" data-dismiss>Film's Work <span class="arrow">↗</span></a>
-      <a href="#about" class="btn btn-secondary" data-dismiss>About John <span class="arrow">↗</span></a>
+      <a href="#reel" class="btn btn-primary">Film Work <span class="arrow">↗</span></a>
+      <a href="#about" class="btn btn-secondary">About John <span class="arrow">↗</span></a>
     </div>
   </div>
+  <div class="scroll-cue">Scroll</div>
 </section>
 
 <!-- ============ HERO ============ -->
@@ -1035,11 +1202,103 @@
   </div>
   <div class="col-r">
     <p class="lead" data-blur>Creativity. Unique. Catchy.</p>
-    <p data-blur>John is a director at <em>Songmue Production</em>, bringing creativity and vision to every project — making ads that customers easily remember and never forget, in his own unique way.</p>
+    <p data-blur>John Kitithat — Director at <em>Songmue Production</em>, bringing creativity and vision to every project — making ads that customers easily remember and never forget, in his own unique way.</p>
     <p data-blur>He likes to explore storytelling with new techniques — <em>VFX, camera movement, visual design</em> — so people don't skip his ads. His ideas live on upcoming trends and always reflect back to branding recognition.</p>
     <p data-blur>Representing the key selling point clearly and sensationally, he helps brands promote sales and make ads run the world — getting to the point and going viral.</p>
     <p data-blur>Most of all, he likes to make people happy working with him, exploring new ways of work with passion. He helps teams create something new, <em>without limitation</em>, always thinking of ways to push the work further than before.</p>
   </div>
+</section>
+
+<!-- ============ WORK HISTORY ============ -->
+<div class="section-head" id="history">
+  <span class="num">03 /</span>
+  <h2>Work History</h2>
+  <span class="count">15+ Years</span>
+</div>
+
+<section class="history">
+  <div class="history-col">
+    <h3>Film Commercial</h3>
+    <div class="history-entry">
+      <span class="history-year">2012 — Present</span>
+      <span class="history-name">Songmue Production</span>
+      <span class="history-role">Film Director &amp; Founder</span>
+    </div>
+    <div class="history-entry">
+      <span class="history-year">2008 — 2011</span>
+      <span class="history-name">Phenomena Co., Ltd</span>
+      <span class="history-role">Head of Assistant Director Department</span>
+    </div>
+  </div>
+  <div class="history-col">
+    <h3>Feature Film</h3>
+    <div class="history-entry">
+      <span class="history-year">2012 — 2013</span>
+      <span class="history-name">Last Summer<span class="history-th">ฤดูร้อนนั้น...ฉันตาย</span></span>
+      <span class="history-role">Film Director</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ AWARDS ============ -->
+<div class="section-head" id="awards">
+  <span class="num">04 /</span>
+  <h2>Awards</h2>
+  <span class="count">07 — Honors</span>
+</div>
+
+<!-- Reusable laurel SVG defined once, referenced by <use> -->
+<svg xmlns="http://www.w3.org/2000/svg" style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true">
+  <symbol id="laurel" viewBox="0 0 200 200">
+    <g fill="currentColor">
+      <path d="M100 175 C 80 165 60 148 50 122 C 40 95 38 62 52 28" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+      <ellipse cx="76" cy="160" rx="11" ry="4.5" transform="rotate(-22 76 160)"/>
+      <ellipse cx="63" cy="146" rx="12" ry="4.7" transform="rotate(-36 63 146)"/>
+      <ellipse cx="53" cy="128" rx="13" ry="4.8" transform="rotate(-52 53 128)"/>
+      <ellipse cx="47" cy="108" rx="13.5" ry="5" transform="rotate(-68 47 108)"/>
+      <ellipse cx="44" cy="87" rx="13" ry="4.8" transform="rotate(-84 44 87)"/>
+      <ellipse cx="46" cy="66" rx="12.5" ry="4.6" transform="rotate(-102 46 66)"/>
+      <ellipse cx="52" cy="45" rx="11" ry="4.2" transform="rotate(-118 52 45)"/>
+      <ellipse cx="60" cy="28" rx="9" ry="3.8" transform="rotate(-132 60 28)"/>
+      <g transform="translate(200 0) scale(-1 1)">
+        <path d="M100 175 C 80 165 60 148 50 122 C 40 95 38 62 52 28" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+        <ellipse cx="76" cy="160" rx="11" ry="4.5" transform="rotate(-22 76 160)"/>
+        <ellipse cx="63" cy="146" rx="12" ry="4.7" transform="rotate(-36 63 146)"/>
+        <ellipse cx="53" cy="128" rx="13" ry="4.8" transform="rotate(-52 53 128)"/>
+        <ellipse cx="47" cy="108" rx="13.5" ry="5" transform="rotate(-68 47 108)"/>
+        <ellipse cx="44" cy="87" rx="13" ry="4.8" transform="rotate(-84 44 87)"/>
+        <ellipse cx="46" cy="66" rx="12.5" ry="4.6" transform="rotate(-102 46 66)"/>
+        <ellipse cx="52" cy="45" rx="11" ry="4.2" transform="rotate(-118 52 45)"/>
+        <ellipse cx="60" cy="28" rx="9" ry="3.8" transform="rotate(-132 60 28)"/>
+      </g>
+    </g>
+  </symbol>
+</svg>
+
+<section class="awards">
+  <img src="./laurel.png" alt="" class="awards-laurel" aria-hidden="true" />
+  <p class="awards-line">
+    <span class="award-item"><span class="tier">Silver</span> Cannes Lions Health 2013–2014</span>
+    <span class="dot">·</span>
+    <span class="award-item"><span class="tier">Bronze</span> Cannes Lions 2012</span>
+    <span class="dot">·</span>
+    <span class="award-item"><span class="tier">Silver</span> CLIO 2013</span>
+    <span class="dot">·</span>
+    <span class="award-item"><span class="tier">Silver</span> ADFEST 2013</span>
+    <span class="dot">·</span>
+    <span class="award-item"><span class="tier">Gold</span> The One Show 2013</span>
+    <span class="dot">·</span>
+    <span class="award-item"><span class="tier">Gold</span> Spike Asia 2012</span>
+    <span class="dot">·</span>
+    <span class="award-item"><span class="tier">Gold</span> ADMAN 2012</span>
+  </p>
+</section>
+
+<!-- ============ STUDIO MARK (Songmue Production logo) ============ -->
+<section class="studio-mark">
+  <p class="stamp">Presented by</p>
+  <img src="./songmue-logo.png" alt="Songmue Production" class="logo" />
+  <p class="tagline">Bangkok · Established 2012</p>
 </section>
 
 <!-- ============ CLIENTS MARQUEE ============ -->
@@ -1052,7 +1311,7 @@
 
 <!-- ============ CONTACT ============ -->
 <section class="contact" id="contact">
-  <h3>Let's make<br>something.</h3>
+  <h3>Let's make<br>something for your brand!</h3>
   <div class="links">
     <a href="mailto:Songmue@gmail.com">
       <span class="label">Email</span>
@@ -1093,46 +1352,6 @@
 </div>
 
 <script>
-  // ---------- Cover dismiss (click button → jump to target, fade cover) ----------
-  (() => {
-    const coverEl = document.getElementById('cover');
-    if (!coverEl) return;
-    let dismissed = false;
-
-    function dismiss(targetId) {
-      if (dismissed) return;
-      dismissed = true;
-
-      // 1. Unlock body scroll, jump instantly to target (under the still-visible cover)
-      document.body.classList.add('no-cover');
-      document.body.classList.remove('cover-active');
-      const target = targetId ? document.getElementById(targetId) : null;
-      if (target) {
-        const y = target.getBoundingClientRect().top + window.scrollY;
-        window.scrollTo(0, y);
-      }
-
-      // 2. Fade cover out
-      coverEl.classList.add('dismiss');
-
-      // 3. After transition, fully hide cover so it can't capture pointer events
-      const onEnd = () => {
-        coverEl.style.display = 'none';
-      };
-      coverEl.addEventListener('transitionend', onEnd, { once: true });
-      // safety fallback
-      setTimeout(onEnd, 1200);
-    }
-
-    document.querySelectorAll('.cover [data-dismiss]').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        e.preventDefault();
-        const href = btn.getAttribute('href') || '';
-        dismiss(href.replace('#', ''));
-      });
-    });
-  })();
-
   // ---------- WebGL shader cover (cloud/nebula) ----------
   // GLSL source — adapted from Matthias Hurrle (@atzedent)
   const SHADER_VERT = `#version 300 es
@@ -1381,50 +1600,74 @@ void main(void){
     document.body.style.overflow = '';
   }
 
-  // ---------- Hover-to-play Vimeo preview ----------
-  // Use Vimeo's background mode for clean autoplay loop without UI.
-  // Disabled on touch devices (no hover).
+  // ---------- Vimeo preview (desktop = hover, mobile = scroll-into-view) ----------
   const supportsHoverPreview = window.matchMedia('(hover: hover)').matches;
+
+  function createVimeoPreview(id) {
+    const iframe = document.createElement('iframe');
+    iframe.className = 'work-preview';
+    iframe.src = `https://player.vimeo.com/video/${id}?autoplay=1&muted=1&loop=1&background=1&controls=0&autopause=0`;
+    iframe.setAttribute('allow', 'autoplay; fullscreen; picture-in-picture');
+    iframe.setAttribute('frameborder', '0');
+    iframe.setAttribute('tabindex', '-1');
+    iframe.setAttribute('aria-hidden', 'true');
+    iframe.addEventListener('load', () => {
+      requestAnimationFrame(() => iframe.classList.add('ready'));
+    });
+    return iframe;
+  }
+
   document.querySelectorAll('.work').forEach(w => {
     w.addEventListener('click', (e) => {
       e.preventDefault();
       openVimeo(w.dataset.vimeo, w.dataset.title);
     });
-
-    if (!supportsHoverPreview) return;
-
-    let iframe = null;
-    let enterTimeout = null;
-
-    w.addEventListener('mouseenter', () => {
-      // Slight delay so quick mouse swipes don't trigger embed loads
-      enterTimeout = setTimeout(() => {
-        if (iframe) return;
-        const id = w.dataset.vimeo;
-        iframe = document.createElement('iframe');
-        iframe.className = 'work-preview';
-        iframe.src = `https://player.vimeo.com/video/${id}?autoplay=1&muted=1&loop=1&background=1&controls=0&autopause=0`;
-        iframe.setAttribute('allow', 'autoplay; fullscreen; picture-in-picture');
-        iframe.setAttribute('frameborder', '0');
-        iframe.setAttribute('tabindex', '-1');
-        iframe.setAttribute('aria-hidden', 'true');
-        const thumb = w.querySelector('.work-thumb');
-        thumb.appendChild(iframe);
-        // fade in once loaded
-        iframe.addEventListener('load', () => {
-          requestAnimationFrame(() => iframe && iframe.classList.add('ready'));
-        });
-      }, 150);
-    });
-
-    w.addEventListener('mouseleave', () => {
-      clearTimeout(enterTimeout);
-      if (iframe) {
-        iframe.remove();
-        iframe = null;
-      }
-    });
   });
+
+  // Desktop: hover-to-play
+  if (supportsHoverPreview) {
+    document.querySelectorAll('.work').forEach(w => {
+      let iframe = null;
+      let enterTimeout = null;
+
+      w.addEventListener('mouseenter', () => {
+        enterTimeout = setTimeout(() => {
+          if (iframe) return;
+          iframe = createVimeoPreview(w.dataset.vimeo);
+          w.querySelector('.work-thumb').appendChild(iframe);
+        }, 150);
+      });
+
+      w.addEventListener('mouseleave', () => {
+        clearTimeout(enterTimeout);
+        if (iframe) { iframe.remove(); iframe = null; }
+      });
+    });
+  } else {
+    // Mobile: autoplay tile when scrolled into view, remove when out.
+    // Use IntersectionObserver with central viewport band to play only the focused tile.
+    const playing = new Map(); // element → iframe
+    const mObs = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        const w = entry.target;
+        if (entry.isIntersecting && entry.intersectionRatio > 0.55) {
+          if (!playing.has(w)) {
+            const iframe = createVimeoPreview(w.dataset.vimeo);
+            w.querySelector('.work-thumb').appendChild(iframe);
+            playing.set(w, iframe);
+          }
+        } else {
+          const iframe = playing.get(w);
+          if (iframe) {
+            iframe.remove();
+            playing.delete(w);
+          }
+        }
+      });
+    }, { threshold: [0, 0.55, 0.85], rootMargin: '-20% 0px -20% 0px' });
+
+    document.querySelectorAll('.work').forEach(w => mObs.observe(w));
+  }
 
   // ---------- Holographic 3D tilt on work tiles ----------
   // Tuned subtle for MUJI minimal feel — gentle tilt + cursor-follow gleam.
