@@ -769,11 +769,52 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
     font-family: var(--mono);
     font-size: 11px;
     color: var(--fg-dim);
     letter-spacing: 0.08em;
     text-transform: uppercase;
+  }
+  /* live visitor counter */
+  .visit-counter {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .visit-counter .live-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #4caf6a;
+    box-shadow: 0 0 0 0 rgba(76, 175, 106, 0.55);
+    animation: live-pulse 2s ease-out infinite;
+  }
+  @keyframes live-pulse {
+    0%   { box-shadow: 0 0 0 0 rgba(76,175,106,0.55); }
+    70%  { box-shadow: 0 0 0 10px rgba(76,175,106,0); }
+    100% { box-shadow: 0 0 0 0 rgba(76,175,106,0); }
+  }
+  .visit-counter .count {
+    font-weight: 500;
+    color: var(--fg);
+    font-variant-numeric: tabular-nums;
+    /* subtle shine on the number to match awards premium feel */
+    background: linear-gradient(110deg, var(--fg) 0%, var(--fg) 35%, #b8946a 50%, var(--fg) 65%, var(--fg) 100%);
+    background-size: 220% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    animation: awards-shine 4s linear infinite;
+  }
+  .visit-counter .label { color: var(--fg-dim); }
+  .visit-counter.error .count {
+    -webkit-text-fill-color: var(--fg-dim);
+    color: var(--fg-dim);
+    background: none;
+    animation: none;
   }
 
   /* ---------- Modal (keep dark for cinema feel) ---------- */
@@ -1339,7 +1380,13 @@
 <!-- ============ FOOTER ============ -->
 <footer>
   <span>© 2026 John Kittithat</span>
-  <span>Site — v1.2 / Made with care</span>
+  <span class="visit-counter" id="visitCounter" aria-live="polite">
+    <span class="live-dot" aria-hidden="true"></span>
+    <span class="label">Viewed</span>
+    <span class="count" id="visitCount">···</span>
+    <span class="label">Times</span>
+  </span>
+  <span>Site — v1.3 / Made with care</span>
 </footer>
 
 <!-- ============ MODAL ============ -->
@@ -1511,6 +1558,53 @@ void main(void){
       span.textContent = ch === ' ' ? ' ' : ch;
       target.appendChild(span);
     });
+  })();
+
+  // ---------- Public visitor counter (Abacus free anonymous API) ----------
+  // Hits API increments once per browser-day to avoid refresh-inflation.
+  (() => {
+    const NAMESPACE = 'johnkittithat-songmue-portfolio';
+    const KEY = 'pageviews';
+    const HIT_URL = `https://abacus.jasoncameron.dev/hit/${NAMESPACE}/${KEY}`;
+    const GET_URL = `https://abacus.jasoncameron.dev/get/${NAMESPACE}/${KEY}`;
+
+    const elCount = document.getElementById('visitCount');
+    const elWrap = document.getElementById('visitCounter');
+    if (!elCount || !elWrap) return;
+
+    // Check if this browser already counted today
+    const today = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
+    const lastHit = (function(){ try { return localStorage.getItem('jk-last-hit'); } catch(e){ return null; } })();
+    const shouldIncrement = lastHit !== today;
+    const url = shouldIncrement ? HIT_URL : GET_URL;
+
+    function animateCountTo(target){
+      const duration = 1400;
+      const start = performance.now();
+      function tick(now){
+        const t = Math.min(1, (now - start) / duration);
+        // ease-out cubic
+        const eased = 1 - Math.pow(1 - t, 3);
+        const value = Math.round(target * eased);
+        elCount.textContent = value.toLocaleString('en-US');
+        if (t < 1) requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+    }
+
+    fetch(url)
+      .then(r => r.ok ? r.json() : Promise.reject())
+      .then(data => {
+        const n = typeof data.value === 'number' ? data.value : 0;
+        animateCountTo(n);
+        if (shouldIncrement) {
+          try { localStorage.setItem('jk-last-hit', today); } catch(e){}
+        }
+      })
+      .catch(() => {
+        elWrap.classList.add('error');
+        elCount.textContent = '—';
+      });
   })();
 
   // ---------- Clock (BKK) ----------
