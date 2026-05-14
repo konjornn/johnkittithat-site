@@ -47,6 +47,12 @@
     line-height: 1.55;
     -webkit-font-smoothing: antialiased;
     overflow-x: hidden;
+    overflow-y: hidden; /* locked while cover is visible */
+    height: 100vh;
+  }
+  body.no-cover {
+    overflow-y: auto;
+    height: auto;
   }
 
   a { color: inherit; text-decoration: none; }
@@ -651,14 +657,20 @@
     cursor: pointer;
   }
 
-  /* ---------- Cover (WebGL shader hero) ---------- */
+  /* ---------- Cover (WebGL shader hero — fullscreen overlay) ---------- */
   .cover {
-    position: relative;
-    width: 100%;
-    height: 100vh;
+    position: fixed;
+    inset: 0;
+    z-index: 60;
     overflow: hidden;
     background: #000;
     isolation: isolate;
+    transition: opacity .8s cubic-bezier(.2,.7,.2,1), transform .8s cubic-bezier(.2,.7,.2,1);
+  }
+  .cover.dismiss {
+    opacity: 0;
+    transform: scale(0.96);
+    pointer-events: none;
   }
   .cover canvas {
     position: absolute;
@@ -869,15 +881,14 @@
       <strong class="sub-name">JohnKittithat</strong> — Film Director at Songmue Production. Crafting visually driven stories and culturally memorable brand film campaigns.
     </p>
     <div class="ctas">
-      <a href="#reel" class="btn btn-primary">Film's Work <span class="arrow">↗</span></a>
-      <a href="#about" class="btn btn-secondary">About John <span class="arrow">↗</span></a>
+      <a href="#hero" class="btn btn-primary" data-dismiss>Film's Work <span class="arrow">↗</span></a>
+      <a href="#about" class="btn btn-secondary" data-dismiss>About John <span class="arrow">↗</span></a>
     </div>
   </div>
-  <div class="scroll-cue">Scroll</div>
 </section>
 
 <!-- ============ HERO ============ -->
-<header class="hero">
+<header class="hero" id="hero">
   <div class="hero-meta">
     <span>Bangkok — Songmue Production</span>
     <span id="time"></span>
@@ -1082,6 +1093,46 @@
 </div>
 
 <script>
+  // ---------- Cover dismiss (click button → jump to target, fade cover) ----------
+  (() => {
+    const coverEl = document.getElementById('cover');
+    if (!coverEl) return;
+    let dismissed = false;
+
+    function dismiss(targetId) {
+      if (dismissed) return;
+      dismissed = true;
+
+      // 1. Unlock body scroll, jump instantly to target (under the still-visible cover)
+      document.body.classList.add('no-cover');
+      document.body.classList.remove('cover-active');
+      const target = targetId ? document.getElementById(targetId) : null;
+      if (target) {
+        const y = target.getBoundingClientRect().top + window.scrollY;
+        window.scrollTo(0, y);
+      }
+
+      // 2. Fade cover out
+      coverEl.classList.add('dismiss');
+
+      // 3. After transition, fully hide cover so it can't capture pointer events
+      const onEnd = () => {
+        coverEl.style.display = 'none';
+      };
+      coverEl.addEventListener('transitionend', onEnd, { once: true });
+      // safety fallback
+      setTimeout(onEnd, 1200);
+    }
+
+    document.querySelectorAll('.cover [data-dismiss]').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const href = btn.getAttribute('href') || '';
+        dismiss(href.replace('#', ''));
+      });
+    });
+  })();
+
   // ---------- WebGL shader cover (cloud/nebula) ----------
   // GLSL source — adapted from Matthias Hurrle (@atzedent)
   const SHADER_VERT = `#version 300 es
