@@ -93,13 +93,35 @@
     letter-spacing: 0.08em;
     text-transform: uppercase;
   }
+  /* IG-style profile avatar above the name */
+  .hero-avatar {
+    width: clamp(72px, 8vw, 104px);
+    height: clamp(72px, 8vw, 104px);
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+    margin-bottom: 4px;
+    background: var(--bg-2);
+    /* warm champagne ring + soft shadow */
+    border: 2px solid rgba(255,255,255,0.7);
+    box-shadow:
+      0 0 0 1px var(--line),
+      0 6px 22px rgba(34,28,20,0.14);
+    transition: transform .45s cubic-bezier(.2,.7,.2,1), box-shadow .3s ease;
+  }
+  .hero-avatar:hover {
+    transform: scale(1.06) rotate(-2deg);
+    box-shadow:
+      0 0 0 1px var(--accent),
+      0 10px 30px rgba(34,28,20,0.2);
+  }
   .hero-title {
     font-family: var(--display);
     font-weight: 500;
     font-size: clamp(32px, 6.5vw, 100px);
     line-height: 1;
     letter-spacing: -0.04em;
-    margin: 40px 0;
+    margin: 0 0 40px;
     position: relative;
   }
   /* per-letter hover animation */
@@ -1102,6 +1124,7 @@
     <span id="time"></span>
   </div>
 
+  <img src="./profile.png" alt="John Kittithat" class="hero-avatar" />
   <h1 class="hero-title">
     <span class="hover-letters" id="heroName" aria-label="JohnKittithat">JohnKittithat</span>
     <span class="subtitle">— Film Director</span>
