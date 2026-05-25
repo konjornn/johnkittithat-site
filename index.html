@@ -93,14 +93,21 @@
     letter-spacing: 0.08em;
     text-transform: uppercase;
   }
-  /* IG-style profile avatar above the name */
+  /* IG-style profile avatar inline with the name */
+  .hero-title .name-row {
+    display: inline-flex;
+    align-items: center;
+    gap: clamp(12px, 2vw, 24px);
+    flex-wrap: wrap;
+  }
   .hero-avatar {
-    width: clamp(72px, 8vw, 104px);
-    height: clamp(72px, 8vw, 104px);
+    width: clamp(56px, 7vw, 96px);
+    height: clamp(56px, 7vw, 96px);
     border-radius: 50%;
     object-fit: cover;
-    display: block;
-    margin-bottom: 4px;
+    display: inline-block;
+    vertical-align: middle;
+    flex-shrink: 0;
     background: var(--bg-2);
     /* warm champagne ring + soft shadow */
     border: 2px solid rgba(255,255,255,0.7);
@@ -142,10 +149,12 @@
     display: block;
     font-family: var(--mono);
     font-weight: 400;
-    font-size: clamp(11px, 0.9vw, 13px);
+    font-size: clamp(12px, 1vw, 14px);
     letter-spacing: 0.16em;
     color: var(--fg-dim);
-    margin-top: 14px;
+    margin-top: -6px;
+    /* align with the "J" — offset by avatar width + gap */
+    margin-left: calc(clamp(56px, 7vw, 96px) + clamp(12px, 2vw, 24px));
     line-height: 1;
     text-transform: uppercase;
   }
@@ -1124,9 +1133,11 @@
     <span id="time"></span>
   </div>
 
-  <img src="./profile.png" alt="John Kittithat" class="hero-avatar" />
   <h1 class="hero-title">
-    <span class="hover-letters" id="heroName" aria-label="JohnKittithat">JohnKittithat</span>
+    <span class="name-row">
+      <img src="./profile.png" alt="John Kittithat" class="hero-avatar" />
+      <span class="hover-letters" id="heroName" aria-label="JohnKittithat">JohnKittithat</span>
+    </span>
     <span class="subtitle">— Film Director</span>
   </h1>
 
