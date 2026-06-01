@@ -357,10 +357,25 @@
     width: 100%; height: 100%;
     object-fit: cover;
     display: block;
-    transition: transform .8s cubic-bezier(.2,.7,.2,1), opacity .3s ease;
-    opacity: 0.95;
+    /* LazyImage: start hidden, fade in smoothly when loaded */
+    opacity: 0;
+    transition: transform .8s cubic-bezier(.2,.7,.2,1), opacity 1.2s ease;
   }
-  .work:hover .work-thumb img { transform: scale(1.04); opacity: 1; }
+  .work-thumb img.loaded { opacity: 0.95; }
+  .work:hover .work-thumb img.loaded { transform: scale(1.04); opacity: 1; }
+  /* skeleton pulse on the placeholder while loading */
+  .work-thumb .ph {
+    transition: opacity .8s ease;
+    animation: skeleton-pulse 1.6s ease-in-out infinite;
+  }
+  @keyframes skeleton-pulse {
+    0%, 100% { opacity: 0.6; }
+    50%      { opacity: 0.25; }
+  }
+  .work-thumb .ph.fade-out {
+    opacity: 0 !important;
+    animation: none;
+  }
   /* hover-to-play Vimeo preview iframe */
   .work-preview {
     position: absolute;
@@ -619,6 +634,7 @@
     height: auto;
     margin: 0 auto 28px;
     display: block;
+    /* image is now padded so centroid is dead-center — display centers perfectly */
   }
   .awards-line {
     font-family: var(--display);
@@ -1024,17 +1040,20 @@
   .cover .btn .arrow { transition: transform .3s ease; }
   .cover .btn:hover .arrow { transform: translate(3px, -3px); }
 
-  /* scroll hint at bottom of cover */
+  /* scroll hint at bottom of cover — robust centering */
   .cover .scroll-cue {
     position: absolute;
     bottom: 28px;
-    left: 50%;
-    transform: translateX(-50%);
+    left: 0;
+    right: 0;
+    width: max-content;
+    margin-inline: auto;
     color: rgba(245,244,239,0.6);
     font-family: var(--mono);
     font-size: 10.5px;
     letter-spacing: 0.18em;
     text-transform: uppercase;
+    text-align: center;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -1693,21 +1712,30 @@ void main(void){
     reelVideo.play().catch(()=>{});
   });
 
-  // Works thumbnails
+  // Works thumbnails — LazyImage style (skeleton pulse → fade in image)
   document.querySelectorAll('.work').forEach(async (el) => {
     const id = el.dataset.vimeo;
     const thumb = el.querySelector('.work-thumb');
     const ph = el.querySelector('.ph');
     const url = await loadVimeoThumb(id);
-    if (url) {
-      const img = new Image();
-      img.alt = el.dataset.title;
-      img.onload = () => {
-        thumb.insertBefore(img, ph);
-        ph.style.display = 'none';
-      };
-      img.src = url.replace(/_\d+x\d+/, '_960x540');
-    }
+    if (!url) return;
+    const img = new Image();
+    img.alt = el.dataset.title;
+    img.loading = 'lazy';
+    img.decoding = 'async';
+    img.onload = () => {
+      thumb.insertBefore(img, ph);
+      // RAF so the browser applies opacity:0 first, then transitions to .loaded
+      requestAnimationFrame(() => {
+        img.classList.add('loaded');
+        // fade out skeleton placeholder shortly after
+        setTimeout(() => ph.classList.add('fade-out'), 250);
+      });
+    };
+    img.onerror = () => {
+      ph.classList.add('fade-out');
+    };
+    img.src = url.replace(/_\d+x\d+/, '_960x540');
   });
 
   // ---------- Modal ----------
