@@ -334,16 +334,13 @@
   .works {
     padding: 0 32px 80px;
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 12px;
   }
   .work {
     cursor: pointer;
     display: block;
-    transform: perspective(1200px) rotateX(0deg) rotateY(0deg);
-    transform-style: preserve-3d;
-    transition: transform .5s cubic-bezier(.2,.7,.2,1);
-    will-change: transform;
+    position: relative;
   }
   .work-thumb {
     position: relative;
@@ -351,16 +348,13 @@
     aspect-ratio: 16 / 9;
     overflow: hidden;
     background: var(--bg-2);
-    transform-style: preserve-3d;
   }
   .work-thumb img {
     width: 100%; height: 100%;
     object-fit: cover;
     display: block;
-    transition: transform .8s cubic-bezier(.2,.7,.2,1), opacity .3s ease;
     opacity: 0.95;
   }
-  .work:hover .work-thumb img { transform: scale(1.04); opacity: 1; }
   /* hover-to-play Vimeo preview iframe */
   .work-preview {
     position: absolute;
@@ -382,43 +376,6 @@
     pointer-events: none;
     z-index: 2;
   }
-  /* holographic gleam — follows cursor, stronger now */
-  .work-thumb::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background:
-      radial-gradient(
-        circle at var(--bg-x, 50%) var(--bg-y, 50%),
-        rgba(255,255,255,0.55) 0%,
-        rgba(255,250,240,0.22) 28%,
-        transparent 60%
-      );
-    opacity: 0;
-    transition: opacity .35s ease;
-    pointer-events: none;
-    mix-blend-mode: overlay;
-    z-index: 3;
-  }
-  .work:hover .work-thumb::before { opacity: 1; }
-  /* subtle outer glow appearing on hover */
-  .work::after {
-    content: '';
-    position: absolute;
-    inset: -1px;
-    border-radius: inherit;
-    background: radial-gradient(
-      400px circle at var(--x, 50%) var(--y, 50%),
-      rgba(26,25,22,0.08),
-      transparent 40%
-    );
-    opacity: 0;
-    transition: opacity .4s ease;
-    pointer-events: none;
-    z-index: -1;
-  }
-  .work { position: relative; }
-  .work:hover::after { opacity: 1; }
   .work-thumb .ph {
     position: absolute; inset: 0;
     display: flex; align-items: center; justify-content: center;
@@ -480,6 +437,9 @@
   .w-7 .work-thumb { background: linear-gradient(150deg, #efe8e8, #e3d4d4 50%, #d3bdbd); }
   .w-8 .work-thumb { background: linear-gradient(110deg, #efe8de, #e4d4c0 50%, #d3bd9f); }
   .w-9 .work-thumb { background: linear-gradient(220deg, #e3ebe6, #ccdcd2 50%, #b3c7bb); }
+  .w-10 .work-thumb { background: linear-gradient(130deg, #efe5de, #e2cfbe 50%, #d1b398); }
+  .w-11 .work-thumb { background: linear-gradient(170deg, #ece6dc, #ddd0ba 50%, #c7b394); }
+  .w-12 .work-thumb { background: linear-gradient(210deg, #eceae1, #d9d5c3 50%, #c0baa0); }
 
   /* ---------- About ---------- */
   .about {
@@ -1189,7 +1149,7 @@
 <div class="section-head" id="work">
   <span class="num">01 /</span>
   <h2>Selected Works</h2>
-  <span class="count">09 — Projects</span>
+  <span class="count">12 — Projects</span>
 </div>
 
 <section class="works">
@@ -1262,6 +1222,30 @@
     <div class="work-info">
       <span class="title">Malee Coco</span>
       <span class="meta">Commercial · 2017</span>
+    </div>
+  </a>
+
+  <a class="work w-10" href="#" data-vimeo="1224561772" data-title="Beerlao — Pride of Laos">
+    <div class="work-thumb"><span class="ph">10</span></div>
+    <div class="work-info">
+      <span class="title">Beerlao — Pride of Laos</span>
+      <span class="meta">Commercial · 2026</span>
+    </div>
+  </a>
+
+  <a class="work w-11" href="#" data-vimeo="1215101157" data-title="Birdy 3in1 — Bean Journey">
+    <div class="work-thumb"><span class="ph">11</span></div>
+    <div class="work-info">
+      <span class="title">Birdy 3in1 — Bean Journey</span>
+      <span class="meta">Commercial · 2026</span>
+    </div>
+  </a>
+
+  <a class="work w-12" href="#" data-vimeo="498893497" data-title="Deo Klear — Passion">
+    <div class="work-thumb"><span class="ph">12</span></div>
+    <div class="work-info">
+      <span class="title">Deo Klear — Passion</span>
+      <span class="meta">Commercial · 2021</span>
     </div>
   </a>
 </section>
@@ -1799,47 +1783,6 @@ void main(void){
     }, { threshold: [0, 0.55, 0.85], rootMargin: '-20% 0px -20% 0px' });
 
     document.querySelectorAll('.work').forEach(w => mObs.observe(w));
-  }
-
-  // ---------- Holographic 3D tilt on work tiles ----------
-  // Tuned subtle for MUJI minimal feel — gentle tilt + cursor-follow gleam.
-  // Disabled on touch devices and when user prefers reduced motion.
-  const supportsHover = window.matchMedia('(hover: hover)').matches;
-  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  if (supportsHover && !reducedMotion) {
-    document.querySelectorAll('.work').forEach(card => {
-      let rafId = null;
-
-      card.addEventListener('mousemove', (e) => {
-        const rect = card.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        const cx = rect.width / 2;
-        const cy = rect.height / 2;
-
-        // Stronger tilt: max ~12 degrees on the corners
-        const rotateX = ((y - cy) / cy) * -12;
-        const rotateY = ((x - cx) / cx) * 12;
-
-        cancelAnimationFrame(rafId);
-        rafId = requestAnimationFrame(() => {
-          card.style.setProperty('--x', `${x}px`);
-          card.style.setProperty('--y', `${y}px`);
-          card.style.setProperty('--bg-x', `${(x / rect.width) * 100}%`);
-          card.style.setProperty('--bg-y', `${(y / rect.height) * 100}%`);
-          card.style.transform =
-            `perspective(900px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-6px) scale(1.02)`;
-        });
-      });
-
-      card.addEventListener('mouseleave', () => {
-        cancelAnimationFrame(rafId);
-        card.style.transform = 'perspective(1200px) rotateX(0deg) rotateY(0deg)';
-        card.style.setProperty('--bg-x', '50%');
-        card.style.setProperty('--bg-y', '50%');
-      });
-    });
   }
 
   closeBtn.addEventListener('click', closeModal);
